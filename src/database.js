@@ -15,35 +15,40 @@ async function startDatabase() {
     await database.collection("events").insertMany([
       {
         id: 1,
-        title: "GraphQL Introduction Night",
-        description: "Introductionary night to GraphQL",
-        date: "2019-11-06T17:34:25+00:00",
+        title: "The Grandmaster of Demonic Cultivation",
+        description: "Chinese cultivation-themed novel",
+        date: "2020-01-30T19:20:35+00:00",
         attendants: [
           {
             id: 1,
-            name: "Peter",
-            age: 34
+            name: "Wei WuXian",
+            age: 23
           },
           {
             id: 2,
-            name: "Kassandra",
-            age: 23
+            name: "Lan Wangji",
+            age: 32
           }
         ]
       },
       {
         id: 2,
-        title: "GraphQL Introduction Night #2",
-        description: "Introductionary night to GraphQL",
-        date: "2019-11-06T17:34:25+00:00",
+        title: "The Grandmaster of Demonic Cultivation",
+        description: "Chinese cultivation-themed novel",
+        date: "2020-01-30T19:20:35+00:00",
         attendants: [
           {
-            id: 3,
-            name: "Kim",
-            age: null
+            id: 1,
+            name: "Lan SiZhui",
+            age: 17
+          },
+          {
+            id: 2,
+            name: "Jin Ling",
+            age: 15
           }
         ]
-      }
+      },
     ]);
   }
 
