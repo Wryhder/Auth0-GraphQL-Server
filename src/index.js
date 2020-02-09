@@ -25,6 +25,18 @@ const resolvers = {
     return db
       .collection('events')
       .findOne({ id });
+  },
+  editEvent: async ({ id, title, description }, context) => {
+    const { db } = await context();
+
+    return db
+      .collection('events')
+      .findOneAndUpdate(
+        { id },
+        { $set: { title, description } },
+        { returnOriginal: false },
+      )
+      .then(resp => resp.value);
   }
 };
 
