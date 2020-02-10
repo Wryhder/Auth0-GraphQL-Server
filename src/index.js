@@ -3,31 +3,45 @@ const graphqlHTTP = require("express-graphql");
 const schema = require("./schema");
 const startDatabase = require("./database");
 const expressPlayground = require("graphql-playground-middleware-express").default;
+const isTokenValid = require("./validate");
 
-const context = async () => {
+const context = async req => {
   const db = await startDatabase();
+  const { authorization: token } = req.headers;
 
-  return { db };
+  return { db, token };
 }
 
 const resolvers = {
   events: async (_, context) => {
-    const { db } = await context();
+    const { db, token } = await context();
+    const { error } = await isTokenValid(token);
+    const events =  db
+                    .collection('events')
+                    .find();
 
-    return db
-      .collection('events')
-      .find()
-      .toArray();
+    return !error
+      ? events.toArray()
+      : events.project({ attendants: null }).toArray();
   },
   event: async ({ id }, context) => {
-    const { db } = await context();
-
-    return db
-      .collection('events')
-      .findOne({ id });
+    const { db, token } = await context();
+    const { error } = await isTokenValid(token);
+    const event = db
+                    .collection('events')
+                    .findOne({ id });
+    
+    return !error
+      ? event
+      : { ...event, attendants: null };
   },
   editEvent: async ({ id, title, description }, context) => {
-    const { db } = await context();
+    const { db, token } = await context();
+    const { error } = await isTokenValid(token);
+
+    if (error) {
+      throw new Error(error);
+    }
 
     return db
       .collection('events')
@@ -44,11 +58,11 @@ const app = express();
 
 app.use(
   "/graphql",
-  graphqlHTTP({
+  graphqlHTTP(async (req) => ({
     schema,
     rootValue: resolvers,
-    context
-  })
+    context: () => context(req)
+  })),
 );
 
 app.get("/playground", expressPlayground({ endpoint: "/graphql" }));
