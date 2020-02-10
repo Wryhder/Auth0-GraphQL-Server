@@ -11,7 +11,7 @@ A GraphQL server created with Node.js and secured using Auth0
 
 3. Access the GraphQL playground in your browser @ http://localhost:4000/playground to send queries to the server
 
-__NB:__ You'll need a `.env` in the root directory with this content:
+__NB:__ You'll need a `.env` file in the root directory to set up environment variables:
 ```bash
 AUTH0_DOMAIN=YOUR_AUTH0_DOMAIN
 API_IDENTIFIER=YOUR_API_IDENTIFIER
